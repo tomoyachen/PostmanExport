@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace JmeterExport.FiddlerExtensions
+namespace PostmanExport.FiddlerExtensions
 {
 	public class Element
 	{
@@ -18,7 +18,7 @@ namespace JmeterExport.FiddlerExtensions
 		public string surroundByTestPlan(string content, string testPlanName = "测试计划")
 		{
 			this.stringBuilder = new StringBuilder();
-			this.stringBuilder.Append("<jmeterTestPlan version=\"1.2\" properties=\"3.2\">");
+			this.stringBuilder.Append("<PostmanTestPlan version=\"1.2\" properties=\"3.2\">");
 			this.stringBuilder.Append("<hashTree>");
 			this.stringBuilder.Append(string.Format("<TestPlan guiclass=\"TestPlanGui\" testclass=\"TestPlan\" testname=\"{0}\" enabled=\"true\">", testPlanName));
 			this.stringBuilder.Append("<stringProp name=\"TestPlan.comments\"></stringProp>");
@@ -41,7 +41,7 @@ namespace JmeterExport.FiddlerExtensions
 			this.stringBuilder.Append("</WorkBench>");
 			this.stringBuilder.Append("<hashTree/>");
 			this.stringBuilder.Append("</hashTree>");
-			this.stringBuilder.Append("</jmeterTestPlan>");
+			this.stringBuilder.Append("</PostmanTestPlan>");
 			return this.stringBuilder.ToString();
 		}
 
@@ -262,14 +262,14 @@ namespace JmeterExport.FiddlerExtensions
 			{
 				this.stringBuilder.Append(content);
 			}
-			this.stringBuilder.Append(string.Format("<com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass = \"com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui\" testclass=\"com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion\" testname=\"{0}\" enabled=\"true\">", elementName));
+			this.stringBuilder.Append(string.Format("<com.atlantbh.Postman.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass = \"com.atlantbh.Postman.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui\" testclass=\"com.atlantbh.Postman.plugins.jsonutils.jsonpathassertion.JSONPathAssertion\" testname=\"{0}\" enabled=\"true\">", elementName));
 			this.stringBuilder.Append(string.Format("<stringProp name=\"JSON_PATH\">{0}</stringProp>", jsonPath));
 			this.stringBuilder.Append(string.Format("<stringProp name=\"EXPECTED_VALUE\">{0}</stringProp>", expectedValue));
 			this.stringBuilder.Append("<boolProp name=\"JSONVALIDATION\">true</boolProp>");
 			this.stringBuilder.Append("<boolProp name=\"EXPECT_NULL\">false</boolProp>");
 			this.stringBuilder.Append("<boolProp name=\"INVERT\">false</boolProp>");
 			this.stringBuilder.Append("<boolProp name=\"ISREGEX\">true</boolProp>");
-			this.stringBuilder.Append("</com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>");
+			this.stringBuilder.Append("</com.atlantbh.Postman.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>");
 			this.stringBuilder.Append("<hashTree/>");
 			return this.stringBuilder.ToString();
 		}

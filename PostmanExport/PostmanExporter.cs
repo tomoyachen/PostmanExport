@@ -2,10 +2,10 @@ using Fiddler;
 using System;
 using System.Collections.Generic;
 
-namespace JmeterExport.FiddlerExtensions
+namespace PostmanExport.FiddlerExtensions
 {
-	[ProfferFormat("Jmeter Script", "Export JMeter Script.")]
-	public class JmeterExporter : ISessionExporter, IDisposable
+	[ProfferFormat("Postman Script (Postman脚本)", "Export Postman Script. \r\n导出Postman脚本")]
+	public class PostmanExporter : ISessionExporter, IDisposable
 	{
 		public void Dispose()
 		{
@@ -14,7 +14,7 @@ namespace JmeterExport.FiddlerExtensions
 		public bool ExportSessions(string sExportFormat, Session[] oSessions, Dictionary<string, object> dictOptions, EventHandler<ProgressCallbackEventArgs> evtProgressNotifications)
 		{
 			bool flag = true;
-			string text = Utilities.ObtainSaveFilename("Export As" + sExportFormat, "Jmeter Script (*.jmx)|*.jmx");
+			string text = Utilities.ObtainSaveFilename("Export As" + sExportFormat, "Postman Script (*.jmx)|*.jmx");
 			bool flag2 = text == null;
 			bool result;
 			if (flag2)
@@ -26,7 +26,7 @@ namespace JmeterExport.FiddlerExtensions
 				try
 				{
 					TestPlan testPlan = new TestPlan(oSessions, text);
-					testPlan.saveAsJmeterScript();
+					testPlan.saveAsPostmanScript();
 				}
 				catch (Exception ex)
 				{

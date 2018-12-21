@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-namespace JmeterExport.FiddlerExtensions
+namespace PostmanExport.FiddlerExtensions
 {
 	public class TestPlan
 	{
@@ -27,41 +27,54 @@ namespace JmeterExport.FiddlerExtensions
 			this.filePath = filePath;
 			this.oSessions = oSessions;
 		}
-
+        
 		private string getRequestPath(Session session)
 		{
-			return WebUtility.HtmlEncode(session.PathAndQuery);
+            FiddlerApplication.Log.LogString("getRequestPath: " + WebUtility.HtmlEncode(session.PathAndQuery));
+            return WebUtility.HtmlEncode(session.PathAndQuery);
+            
 		}
 
 		private string getRequestMethod(Session session)
 		{
-			return session.oRequest.headers.HTTPMethod.ToUpper();
+		    FiddlerApplication.Log.LogString("getRequestMethod: " + session.oRequest.headers.HTTPMethod.ToUpper());
+            return session.oRequest.headers.HTTPMethod.ToUpper();
 		}
 
 		private string getRequestBody(Session session)
 		{
-			return WebUtility.HtmlEncode(session.GetRequestBodyAsString());
+		    FiddlerApplication.Log.LogString("getRequestBody: " + WebUtility.HtmlEncode(session.GetRequestBodyAsString()));
+            return WebUtility.HtmlEncode(session.GetRequestBodyAsString());
 		}
 
 		private string getProtocol(Session session)
 		{
-			return session.oRequest.headers.UriScheme.ToLower();
+		    FiddlerApplication.Log.LogString("getProtocol: " + session.oRequest.headers.UriScheme.ToLower());
+            return session.oRequest.headers.UriScheme.ToLower();
 		}
 
 		private bool isExistContentType(Session session)
 		{
-			return session.oRequest.headers.Exists("Content-Type");
+		    
+            return session.oRequest.headers.Exists("Content-Type");
 		}
 
 		private string getContentType(Session session)
 		{
-			//return session.oRequest.get_Item("Content-Type");
-		    return session.oRequest["Content-Type"].ToString();
+            //所有headers
+		    foreach (HTTPHeaderItem element in session.oRequest.headers)
+		    {
+		        FiddlerApplication.Log.LogString("element: " + element );
+
+		    }
+            FiddlerApplication.Log.LogString("getContentType: " + session.oRequest["Content-Type"].ToString());
+            return session.oRequest["Content-Type"].ToString();
         }
 
 		private string getIpAddress(Session session)
 		{
-			return session.hostname;
+		    FiddlerApplication.Log.LogString("getIpAddress: " + session.hostname);
+            return session.hostname;
 		}
 
 		public string generateContent()
@@ -154,7 +167,7 @@ namespace JmeterExport.FiddlerExtensions
 			return element.addXmlHead(XDocument.Parse(text4).ToString());
 		}
 
-		public void saveAsJmeterScript()
+		public void saveAsPostmanScript()
 		{
 			Encoding encoding = new UTF8Encoding(true);
 			string value = this.generateContent();
@@ -163,7 +176,7 @@ namespace JmeterExport.FiddlerExtensions
 			{
 				streamWriter = new StreamWriter(this.filePath, false, encoding);
 				streamWriter.Write(value);
-				MessageBox.Show("Jmeter脚本导出成功 !", "提示", MessageBoxButtons.OK);
+				MessageBox.Show("Postman脚本导出成功 !", "提示", MessageBoxButtons.OK);
 			}
 			finally
 			{
