@@ -25,8 +25,8 @@ namespace PostmanExport.FiddlerExtensions
 			{
 				try
 				{
-					TestPlan testPlan = new TestPlan(oSessions, text);
-					testPlan.saveAsPostmanScript();
+					Collection col = new Collection(oSessions, text);
+				    col.saveAsPostmanScript();
 				}
 				catch (Exception ex)
 				{
