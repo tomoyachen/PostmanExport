@@ -13,3 +13,9 @@ E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\Po
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.csproj.CopyComplete
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.dll
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.pdb
+D:\Visual Studio workspace\source\repos\PostmanExport\PostmanExport\bin\Debug\PostmanExport.dll
+D:\Visual Studio workspace\source\repos\PostmanExport\PostmanExport\bin\Debug\PostmanExport.pdb
+D:\Visual Studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.csproj.CoreCompileInputs.cache
+D:\Visual Studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.csproj.CopyComplete
+D:\Visual Studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.dll
+D:\Visual Studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.pdb

@@ -15,7 +15,6 @@ namespace PostmanExport.FiddlerExtensions
 {
     public class Collection
     {
-        private string filePath;
 
         private Session[] oSessions;
 
@@ -25,13 +24,10 @@ namespace PostmanExport.FiddlerExtensions
 
         public Collection(Session[] oSessions)
         {
-        }
-
-        public Collection(Session[] oSessions, string filePath)
-        {
-            this.filePath = filePath;
             this.oSessions = oSessions;
         }
+
+
 
         private string getRequestPath(Session session)
         {
@@ -135,7 +131,7 @@ namespace PostmanExport.FiddlerExtensions
         }
 
         //获取formdata
-        private List<Formdata> getFormdata(Session session)
+        private List<Formdata> getFormdataList(Session session)
         {
             String requestbody = getRequestBody(session);
             //log(requestbody);
@@ -150,14 +146,25 @@ namespace PostmanExport.FiddlerExtensions
                 foreach (string item in bodyList)
                 {
                     string[] tmp = item.Split('=');
-                    if (tmp.Length >= 2 && tmp[0] != "")
+
+                    try
                     {
-                        dict.Add(tmp[0], tmp[1]);
+                        if (tmp.Length >= 2 && tmp[0] != "")
+                        {
+                            dict.Add(tmp[0], tmp[1]);
+                        }
+                        else if (tmp.Length == 1 && tmp[0] != "")
+                        {
+                            dict.Add(tmp[0], "");
+                        }
                     }
-                    else if (tmp.Length == 1 && tmp[0] != "")
+                    catch (Exception e)
                     {
-                        dict.Add(tmp[0], "");
+                        log(getRequestBody(session));
+                        log("getFormdataList()异常: \r\n" + e);
                     }
+
+                    
 
                 }
 
@@ -203,9 +210,14 @@ namespace PostmanExport.FiddlerExtensions
                     }
                     catch (Exception e)
                     {
-                        dict.Add(keyList[l], "");
-                        Console.WriteLine(e);
-                        //throw;
+                        try
+                        {
+                            dict.Add(keyList[l], "");
+                        }
+                        catch (Exception e2) {
+                            log(getRequestBody(session));
+                            log("getFormdataList()异常: \r\n" + e2);
+                        }
                     }
 
 
@@ -243,7 +255,7 @@ namespace PostmanExport.FiddlerExtensions
         }
 
 
-        //施工中
+        //本体
         public string generateContent()
         {
             if (this.oSessions.Length < 1) //无会话
@@ -253,8 +265,6 @@ namespace PostmanExport.FiddlerExtensions
                 
             }
 
-
-            StringBuilder stringBuilder = new StringBuilder();
             Session[] array = this.oSessions;
             List<Item> itemList = new List<Item>();
             for (int i = 0; i < array.Length; i++)
@@ -267,10 +277,8 @@ namespace PostmanExport.FiddlerExtensions
                 string headerJson = JsonConvert.SerializeObject(headerList); //Header Json
                 //FiddlerApplication.Log.LogString("headerJson >>> " + headerJson);
 
-
                 //序列化formdata
-                List<Formdata> formdataList = getFormdata(session);
-
+                List<Formdata> formdataList = getFormdataList(session);
 
                 //body
                 Body body = new Body();
@@ -278,6 +286,10 @@ namespace PostmanExport.FiddlerExtensions
                 {
                     body.Mode = "formdata";
                     body.Formdata = formdataList;
+                }else if (getContentType(session).Contains("application/x-json-stream"))
+                {
+                    body.Mode = "raw";
+                    body.Raw = getRequestBody(session);
                 }
                 else
                 {
@@ -337,32 +349,12 @@ namespace PostmanExport.FiddlerExtensions
 
             //log("postmanJson >>> " + JsonConvert.SerializeObject(postmanJson));
 
-            return JsonConvert.SerializeObject(postmanJson);
+            string postman = JsonConvert.SerializeObject(postmanJson);
+            return FormJson.ConvertJsonString(postman); //格式化JSON格式
             
         }
 
 
 
-        public void saveAsPostmanScript()
-        {
-            Encoding encoding = new UTF8Encoding(true);
-            string value = this.generateContent();
-            StreamWriter streamWriter = null;
-            try
-            {
-                streamWriter = new StreamWriter(this.filePath, false, encoding);
-                streamWriter.Write(value);
-                MessageBox.Show("Postman脚本导出成功 !", "提示", MessageBoxButtons.OK);
-            }
-            finally
-            {
-                bool flag = streamWriter != null;
-                if (flag)
-                {
-                    streamWriter.Close();
-                    streamWriter.Dispose();
-                }
-            }
-        }
     }
 }
