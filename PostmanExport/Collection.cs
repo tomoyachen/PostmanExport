@@ -142,9 +142,9 @@ namespace PostmanExport.FiddlerExtensions
                 {
 
 
+                    log("requestbody >>> " + requestbody);
 
-
-                    Regex reg = new Regex("name=\"(.*?)\"");
+                    Regex reg = new Regex("name=\"(.+?)\"");
                     Match math = reg.Match(requestbody);
                     string value = math.Groups[0].Value;
 
@@ -155,7 +155,7 @@ namespace PostmanExport.FiddlerExtensions
                     }
 
 
-                    Regex reg2 = new Regex("\n(.*?)\n--");
+                    Regex reg2 = new Regex("\n(.+?)\n--");
                     Match math2 = reg2.Match(requestbody);
                     string value2 = math.Groups[0].Value;
 
