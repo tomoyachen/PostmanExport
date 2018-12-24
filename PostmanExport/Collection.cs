@@ -1,8 +1,11 @@
 ﻿using Fiddler;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -41,8 +44,10 @@ namespace PostmanExport.FiddlerExtensions
             return session.oRequest.headers.HTTPMethod.ToUpper();
         }
 
+
         private string getRequestBody(Session session)
         {
+
             FiddlerApplication.Log.LogString("getRequestBody: " + WebUtility.HtmlEncode(session.GetRequestBodyAsString()));
             return WebUtility.HtmlEncode(session.GetRequestBodyAsString());
         }
@@ -61,15 +66,11 @@ namespace PostmanExport.FiddlerExtensions
 
         private string getContentType(Session session)
         {
-            //所有headers
-            foreach (HTTPHeaderItem element in session.oRequest.headers)
-            {
-                FiddlerApplication.Log.LogString("element: " + element);
-
-            }
+            
             FiddlerApplication.Log.LogString("getContentType: " + session.oRequest["Content-Type"].ToString());
             return session.oRequest["Content-Type"].ToString();
         }
+
 
         private string getIpAddress(Session session)
         {
@@ -77,11 +78,177 @@ namespace PostmanExport.FiddlerExtensions
             return session.hostname;
         }
 
+        private void log(string log)
+        {
+            FiddlerApplication.Log.LogString(log);
+        }
+
         //施工中
         public string generate()
         {
-            Header header = new Header();
-            header.Key = "";
+            if (this.oSessions.Length < 1) //无会话
+            {
+                FiddlerApplication.Log.LogString("没有任何会话可以导出！");
+                throw new Exception();
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            Session[] array = this.oSessions;
+            for (int i = 0; i < array.Length; i++)
+            {
+                Session session = array[i]; //获取第一个会话
+
+
+                //headers
+                List<Header> headerList = new List<Header>();
+                foreach (HTTPHeaderItem element in session.oRequest.headers) //循环取出全部的头信息
+                {
+                    Header header = new Header();
+                    header.Key = element.Name;
+                    header.Value = element.Value;
+                    header.Type = "text";
+                    headerList.Add(header);
+                }
+
+                string headerJson = JsonConvert.SerializeObject(headerList); //Header Json
+                FiddlerApplication.Log.LogString("headerJson >>> " + headerJson);
+
+
+                //序列化formdata
+                String requestbody = getRequestBody(session).Replace("&amp", "&").Replace("&quot;", "\"");
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+
+
+                bool isContainFile = this.getContentType(session).Contains("boundary"); //存在文件
+                if (!isContainFile)
+                {
+                    string[] bodyList = requestbody.Split('&');
+
+                    foreach (string item in bodyList)
+                    {
+                        string[] tmp = item.Split('=');
+                        if (tmp.Length >= 2)
+                        {
+                            dict.Add(tmp[0], tmp[1]);
+                        }
+                        else if (tmp.Length == 1)
+                        {
+                            dict.Add(tmp[0], "");
+                        }
+
+                    }
+
+                }
+                else
+                {
+
+
+
+
+                    Regex reg = new Regex("name=\"(.*?)\"");
+                    Match math = reg.Match(requestbody);
+                    string value = math.Groups[0].Value;
+
+                    while (math.Success)
+                    {
+                        log("key >>> " + math.Groups[1].Value);
+                        math = math.NextMatch();
+                    }
+
+
+                    Regex reg2 = new Regex("\n(.*?)\n--");
+                    Match math2 = reg2.Match(requestbody);
+                    string value2 = math.Groups[0].Value;
+
+                    while (math2.Success)
+                    {
+                        log("value >>> " + math2.Groups[1].Value);
+                        math2 = math2.NextMatch();
+                    }
+
+                }
+
+
+                //formdata
+                List<Formdata> formdataList = new List<Formdata>();
+                foreach (KeyValuePair<string, string> kvp in dict)
+                {
+                    Formdata formdata = new Formdata();
+                    formdata.Key = kvp.Key;
+                    formdata.Value = kvp.Value;
+                    formdata.Type = "text";
+                    formdataList.Add(formdata);
+                }
+                
+                //body
+                Body body = new Body();
+                body.Mode = "formdata";
+                body.Formdata = formdataList;
+
+
+                
+
+
+
+
+
+                /*
+                string text5 = null;
+                string requestPath = this.getRequestPath(session2);
+                bool flag2 = text.Equals(this.getIpAddress(session2));
+                if (flag2)
+                {
+                    text = "";
+                }
+                else
+                {
+                    text = this.getIpAddress(session2);
+                }
+                bool flag3 = text2.Equals(session2.port.ToString());
+                if (flag3)
+                {
+                    text2 = "";
+                }
+                else
+                {
+                    text2 = session2.port.ToString();
+                }
+                bool flag4 = text3.Equals(this.getProtocol(session2));
+                if (flag4)
+                {
+                    text3 = "";
+                }
+                else
+                {
+                    text3 = this.getProtocol(session2);
+                }
+                bool flag5 = this.isExistContentType(session2);
+                string value;
+                if (flag5)
+                {
+                    string contentType = this.getContentType(session2);
+                    bool flag6 = !contentType.Contains("boundary") && !contentType.Contains("octet - stream") && !contentType.Contains("image") && !contentType.Contains("video") && !contentType.Contains("audio") && !contentType.Contains("tar") && !contentType.Contains("zip") && !contentType.Contains("rtf") && (!contentType.Contains("pdf") && !contentType.Contains("powerpoint")) && !contentType.Contains("x-compress") && !contentType.Contains("msword");
+                    if (flag6)
+                    {
+                        value = this.getRequestBody(session2);
+                    }
+                    else
+                    {
+                        value = "";
+                    }
+                }
+                else
+                {
+                    value = this.getRequestBody(session2);
+                }
+                bool flag7 = requestPath.Contains("/unode/stor/uploadPart");
+                if (flag7)
+                {
+                    value = "";
+                }
+                text5 = element.surroundByHTTPSamplerProxy(text5, text, text2, text3, this.getRequestMethod(session2), requestPath, value, requestPath);
+                stringBuilder.Append(text5);
+                */
+            }
 
             return "";
         }

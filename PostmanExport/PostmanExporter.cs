@@ -27,6 +27,7 @@ namespace PostmanExport.FiddlerExtensions
 				{
 					Collection col = new Collection(oSessions, text);
 				    col.saveAsPostmanScript();
+				    col.generate();//调试
 				}
 				catch (Exception ex)
 				{
