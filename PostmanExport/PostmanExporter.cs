@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PostmanExport.FiddlerExtensions
 {
-	[ProfferFormat("Postman Script (Postman脚本)", "Export Postman Script. \r\n导出Postman脚本")]
+	[ProfferFormat("Postman脚本文件", "导出Postman脚本文件 (基于collection v2.1.0) \r\n作者: tomoya_chen")]
 	public class PostmanExporter : ISessionExporter, IDisposable
 	{
 		public void Dispose()
@@ -14,7 +14,7 @@ namespace PostmanExport.FiddlerExtensions
 		public bool ExportSessions(string sExportFormat, Session[] oSessions, Dictionary<string, object> dictOptions, EventHandler<ProgressCallbackEventArgs> evtProgressNotifications)
 		{
 			bool flag = true;
-			string text = Utilities.ObtainSaveFilename("Export As" + sExportFormat, "Postman Script (*.jmx)|*.jmx");
+			string text = Utilities.ObtainSaveFilename("Export As" + sExportFormat, "Postman Script (*.json)|*.json");
 			bool flag2 = text == null;
 			bool result;
 			if (flag2)
@@ -27,7 +27,6 @@ namespace PostmanExport.FiddlerExtensions
 				{
 					Collection col = new Collection(oSessions, text);
 				    col.saveAsPostmanScript();
-				    col.generate();//调试
 				}
 				catch (Exception ex)
 				{

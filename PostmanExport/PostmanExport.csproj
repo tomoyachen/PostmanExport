@@ -49,7 +49,6 @@
     <Compile Include="Collection.cs" />
     <Compile Include="PostmanJson.cs" />
     <Compile Include="PostmanExporter.cs" />
-    <Compile Include="Element.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

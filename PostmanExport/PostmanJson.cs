@@ -38,13 +38,13 @@ namespace PostmanExport
         [JsonProperty("key")]
         public string Key { get; set; }
 
-        [JsonProperty("value")]
+        [JsonProperty("value", NullValueHandling = NullValueHandling.Ignore)]
         public string Value { get; set; }
 
         [JsonProperty("type")]
         public string Type { get; set; }
 
-        [JsonProperty("src")]
+        [JsonProperty("src", NullValueHandling = NullValueHandling.Ignore)]
         public string Src { get; set; }
     }
 
@@ -54,10 +54,10 @@ namespace PostmanExport
         [JsonProperty("mode")]
         public string Mode { get; set; }
 
-        [JsonProperty("formdata")]
+        [JsonProperty("formdata", NullValueHandling = NullValueHandling.Ignore)]
         public IList<Formdata> Formdata { get; set; }
 
-        [JsonProperty("raw")]
+        [JsonProperty("raw", NullValueHandling = NullValueHandling.Ignore)]
         public string Raw { get; set; }
     }
 
@@ -67,11 +67,19 @@ namespace PostmanExport
         [JsonProperty("raw")]
         public string Raw { get; set; }
 
+        [JsonProperty("protocol")]
+        public string Protocol { get; set; }
+
         [JsonProperty("host")]
         public IList<string> Host { get; set; }
 
+        [JsonProperty("port")]
+        public string Port { get; set; }
+
         [JsonProperty("path")]
         public IList<string> Path { get; set; }
+
+        
     }
 
     internal class Request

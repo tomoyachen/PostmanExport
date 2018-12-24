@@ -1,6 +1,7 @@
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\bin\Debug\PostmanExport.dll
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\bin\Debug\PostmanExport.pdb
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\bin\Debug\Fiddler.exe
+E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\bin\Debug\Newtonsoft.Json.dll
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\bin\Debug\Telerik.Analytics.dll
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\bin\Debug\Xceed.Zip.v5.4.dll
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\bin\Debug\Xceed.FileSystem.v5.4.dll
@@ -12,4 +13,3 @@ E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\Po
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.csproj.CopyComplete
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.dll
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.pdb
-E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\bin\Debug\Newtonsoft.Json.dll
