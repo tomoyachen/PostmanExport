@@ -330,8 +330,7 @@ namespace PostmanExport.FiddlerExtensions
                 //log("request >>> " + JsonConvert.SerializeObject(request));
 
                 Item item = new Item();
-                string[] nameTmp2 = getRequestPath(this.oSessions[0]).Split('?');
-                item.Name = nameTmp2[0];
+                item.Name = getRequestPath(this.oSessions[0]).Split('?').GetValue(0).ToString();
                 item.Request = request;
                 item.Response = new List<Object>();
 
@@ -352,9 +351,7 @@ namespace PostmanExport.FiddlerExtensions
 
             Info info = new Info();
             info.PostmanId = "";
-            //string[] nameTmp = getRequestPath(this.oSessions[0]).Split('?');
-            //info.Name = nameTmp[0];
-            info.Name = getRequestPath(this.oSessions[0]).Split('?').GetValue(0).ToString();
+            info.Name = getIpAddress(this.oSessions[0]);
             info.Schema = "https://schema.getpostman.com/json/collection/v2.1.0/collection.json";
 
             PostmanJson postmanJson = new PostmanJson();
