@@ -29,13 +29,15 @@ namespace PostmanExport.FiddlerExtensions
 				{
 					Collection col = new Collection(oSessions);
 				    saveAsPostmanScript(col.generateContent(), filePath);
-				}
+				    MessageBox.Show("导出成功 !", "提示", MessageBoxButtons.OK);
+                }
 				catch (Exception ex)
 				{
 					FiddlerApplication.Log.LogString("导出脚本出错，错误信息如下：");
 					FiddlerApplication.Log.LogString(ex.Message);
 					FiddlerApplication.Log.LogString(ex.StackTrace);
-					flag = false;
+				    MessageBox.Show("导出失败 !\r\n" + ex, "提示", MessageBoxButtons.OK);
+                    flag = false;
 				}
 				result = flag;
 			}
@@ -50,7 +52,6 @@ namespace PostmanExport.FiddlerExtensions
             {
                 streamWriter = new StreamWriter(filePath, false, encoding);
                 streamWriter.Write(content);
-                MessageBox.Show("导出成功 !", "提示", MessageBoxButtons.OK);
             }
             finally
             {

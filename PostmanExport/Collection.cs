@@ -32,7 +32,8 @@ namespace PostmanExport.FiddlerExtensions
         private string getRequestPath(Session session)
         {
             //FiddlerApplication.Log.LogString("getRequestPath: " + WebUtility.HtmlEncode(session.PathAndQuery));
-            return WebUtility.HtmlEncode(session.PathAndQuery);
+            //return WebUtility.HtmlEncode(session.PathAndQuery);
+            return session.PathAndQuery;
 
         }
 
@@ -42,7 +43,7 @@ namespace PostmanExport.FiddlerExtensions
             return session.oRequest.headers.HTTPMethod.ToUpper();
         }
 
-
+        
         private string getRequestBody(Session session)
         {
 
@@ -160,7 +161,7 @@ namespace PostmanExport.FiddlerExtensions
                     }
                     catch (Exception e)
                     {
-                        log(getRequestBody(session));
+                        //log(getRequestBody(session));
                         log("getFormdataList()异常: \r\n" + e);
                     }
 
@@ -215,7 +216,7 @@ namespace PostmanExport.FiddlerExtensions
                             dict.Add(keyList[l], "");
                         }
                         catch (Exception e2) {
-                            log(getRequestBody(session));
+                            //log(getRequestBody(session));
                             log("getFormdataList()异常: \r\n" + e2);
                         }
                     }
@@ -282,19 +283,16 @@ namespace PostmanExport.FiddlerExtensions
 
                 //body
                 Body body = new Body();
-                if (formdataList.Count > 0 && !isJson(getRequestBody(session)))
-                {
-                    body.Mode = "formdata";
-                    body.Formdata = formdataList;
-                }else if (getContentType(session).Contains("application/x-json-stream"))
+                if (isJson(getRequestBody(session)) || getContentType(session).Contains("application/x-json-stream") || formdataList.Count < 1)
                 {
                     body.Mode = "raw";
                     body.Raw = getRequestBody(session);
+
                 }
                 else
                 {
-                    body.Mode = "raw";
-                    body.Raw = getRequestBody(session);
+                    body.Mode = "formdata";
+                    body.Formdata = formdataList;
                 }
 
                 Url url = new Url();
