@@ -123,7 +123,7 @@ namespace PostmanExport.FiddlerExtensions
             {
                 Header header = new Header();
                 header.Key = element.Name;
-                header.Value = element.Value;
+                header.Value = System.Web.HttpUtility.UrlDecode(element.Value);
                 header.Type = "text";
                 headerList.Add(header);
             }
@@ -245,7 +245,7 @@ namespace PostmanExport.FiddlerExtensions
                 }
                 else
                 {
-                    formdata.Value = kvp.Value.Replace("\"", "\\\""); //如果有引号 则转义
+                    formdata.Value = System.Web.HttpUtility.UrlDecode(kvp.Value); //如果有引号 则转义
                     formdata.Type = "text";
                 }
 
@@ -257,6 +257,7 @@ namespace PostmanExport.FiddlerExtensions
                 else
                 {
                     log("formdata属于非json格式" + getRequestPath(session));
+                    
                 }
             }
 
@@ -283,8 +284,7 @@ namespace PostmanExport.FiddlerExtensions
 
                 //headers
                 List<Header> headerList = getHeader(session);
-                string headerJson = JsonConvert.SerializeObject(headerList); //Header Json
-                //FiddlerApplication.Log.LogString("headerJson >>> " + headerJson);
+                //FiddlerApplication.Log.LogString("headerJson >>> " + JsonConvert.SerializeObject(headerList));
 
                 //序列化formdata
                 List<Formdata> formdataList = getFormdataList(session);
@@ -295,7 +295,7 @@ namespace PostmanExport.FiddlerExtensions
                 if (isJson(getRequestBody(session)) || getContentType(session).Contains("application/x-json-stream") || formdataList.Count < 1)
                 {
                     body.Mode = "raw";
-                    body.Raw = getRequestBody(session);
+                    body.Raw = System.Web.HttpUtility.UrlDecode(getRequestBody(session));
 
                 }
                 else
@@ -305,23 +305,20 @@ namespace PostmanExport.FiddlerExtensions
                 }
 
                 Url url = new Url();
-                url.Raw = getIpAddress(session) + getRequestPath(session);
+                url.Raw = getIpAddress(session) + System.Web.HttpUtility.UrlDecode(getRequestPath(session));
                 url.Protocol = getProtocol(session);
                 url.Host = getIpAddress(session).Split('.');
-                string[] portTmp = getRequestPath(session).Split(':');
+                string[] portTmp = getIpAddress(session).Split(':');
                 if (portTmp.Length >= 2)
                 {
-                    string port = portTmp[1];
+                    url.Port = portTmp[1];
                 }
-                url.Path = getRequestPath(session).Split('/');
+                url.Path = System.Web.HttpUtility.UrlDecode(getRequestPath(session)).Split('/');
 
                 //log("url >>> " + JsonConvert.SerializeObject(url));
 
 
-
-
-                string bodyJson = JsonConvert.SerializeObject(body); //Header Json
-                //FiddlerApplication.Log.LogString("bodyJson >>> " + bodyJson);
+                //FiddlerApplication.Log.LogString("bodyJson >>> " + JsonConvert.SerializeObject(body));
 
 
                 Request request = new Request();
@@ -368,9 +365,7 @@ namespace PostmanExport.FiddlerExtensions
 
             string postman = JsonConvert.SerializeObject(postmanJson); //获取JSON字符串
             postman = FormJson.ConvertJsonString(postman); //格式化JSON格式
-            postman = System.Web.HttpUtility.UrlDecode(postman); //url转义
-            //byte[] bt = System.Text.Encoding.Default.GetBytes(postman);
-            //postman = System.Text.Encoding.UTF8.GetString(bt);
+            postman = System.Web.HttpUtility.UrlDecode(postman);
 
             return postman; 
 
