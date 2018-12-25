@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -277,6 +278,7 @@ namespace PostmanExport.FiddlerExtensions
 
             Session[] array = this.oSessions;
             List<Item> itemList = new List<Item>();
+            //Dictionary<string, int> count = new Dictionary<string, int>(); //计数器
             for (int i = 0; i < array.Length; i++)
             {
                 Session session = array[i]; //获取第一个会话
@@ -313,7 +315,7 @@ namespace PostmanExport.FiddlerExtensions
                 {
                     url.Port = portTmp[1];
                 }
-                url.Path = System.Web.HttpUtility.UrlDecode(getRequestPath(session)).Split('/');
+                url.Path = System.Web.HttpUtility.UrlDecode(getRequestPath(session)).Split(new Char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
                 //log("url >>> " + JsonConvert.SerializeObject(url));
 
@@ -340,6 +342,17 @@ namespace PostmanExport.FiddlerExtensions
                 if (isJson(JsonConvert.SerializeObject(item)))
                 {
                     itemList.Add(item);
+                    /*
+                    try
+                    {
+                        count.Add(getIpAddress(session), 1);
+                    }
+                    catch (Exception e)
+                    {
+                        count[getIpAddress(session)]++;
+                    }
+                    */
+
                 }
                 else
                 {
