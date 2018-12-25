@@ -245,11 +245,19 @@ namespace PostmanExport.FiddlerExtensions
                 }
                 else
                 {
-                    formdata.Value = kvp.Value;
+                    formdata.Value = kvp.Value.Replace("\"", "\\\""); //如果有引号 则转义
                     formdata.Type = "text";
                 }
 
-                formdataList.Add(formdata);
+
+                if (isJson(JsonConvert.SerializeObject(formdata)))
+                {
+                    formdataList.Add(formdata);//formdataList
+                }
+                else
+                {
+                    log("formdata属于非json格式" + getRequestPath(session));
+                }
             }
 
             return formdataList;
@@ -281,6 +289,7 @@ namespace PostmanExport.FiddlerExtensions
                 //序列化formdata
                 List<Formdata> formdataList = getFormdataList(session);
 
+
                 //body
                 Body body = new Body();
                 if (isJson(getRequestBody(session)) || getContentType(session).Contains("application/x-json-stream") || formdataList.Count < 1)
@@ -296,7 +305,7 @@ namespace PostmanExport.FiddlerExtensions
                 }
 
                 Url url = new Url();
-                url.Raw = getRequestPath(session) + getRequestPath(session);
+                url.Raw = getIpAddress(session) + getRequestPath(session);
                 url.Protocol = getProtocol(session);
                 url.Host = getIpAddress(session).Split('.');
                 string[] portTmp = getRequestPath(session).Split(':');
@@ -324,21 +333,31 @@ namespace PostmanExport.FiddlerExtensions
                 //log("request >>> " + JsonConvert.SerializeObject(request));
 
                 Item item = new Item();
-                item.Name = getRequestPath(session);
+                string[] nameTmp2 = getRequestPath(this.oSessions[0]).Split('?');
+                item.Name = nameTmp2[0];
                 item.Request = request;
                 item.Response = new List<Object>();
 
                 //log("item >>> " + JsonConvert.SerializeObject(item));
 
-                itemList.Add(item);
+                
+                if (isJson(JsonConvert.SerializeObject(item)))
+                {
+                    itemList.Add(item);
+                }
+                else
+                {
+                    log("item属于非json格式" + getRequestPath(session));
+                }
 
 
             }
 
             Info info = new Info();
             info.PostmanId = "";
-            string[] nameTmp = getRequestPath(this.oSessions[0]).Split('?');
-            info.Name = nameTmp[0];
+            //string[] nameTmp = getRequestPath(this.oSessions[0]).Split('?');
+            //info.Name = nameTmp[0];
+            info.Name = getRequestPath(this.oSessions[0]).Split('?').GetValue(0).ToString();
             info.Schema = "https://schema.getpostman.com/json/collection/v2.1.0/collection.json";
 
             PostmanJson postmanJson = new PostmanJson();
@@ -347,9 +366,14 @@ namespace PostmanExport.FiddlerExtensions
 
             //log("postmanJson >>> " + JsonConvert.SerializeObject(postmanJson));
 
-            string postman = JsonConvert.SerializeObject(postmanJson);
-            return FormJson.ConvertJsonString(postman); //格式化JSON格式
-            
+            string postman = JsonConvert.SerializeObject(postmanJson); //获取JSON字符串
+            postman = FormJson.ConvertJsonString(postman); //格式化JSON格式
+            postman = System.Web.HttpUtility.UrlDecode(postman); //url转义
+            //byte[] bt = System.Text.Encoding.Default.GetBytes(postman);
+            //postman = System.Text.Encoding.UTF8.GetString(bt);
+
+            return postman; 
+
         }
 
 

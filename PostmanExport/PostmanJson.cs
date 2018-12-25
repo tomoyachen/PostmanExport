@@ -75,13 +75,16 @@ namespace PostmanExport
         [JsonProperty("host")]
         public IList<string> Host { get; set; }
 
-        [JsonProperty("port")]
+        [JsonProperty("port", NullValueHandling = NullValueHandling.Ignore)]
         public string Port { get; set; }
 
         [JsonProperty("path")]
         public IList<string> Path { get; set; }
 
-        
+        [JsonProperty("query", NullValueHandling = NullValueHandling.Ignore)]
+        public IList<string> Query { get; set; }
+
+
     }
 
     internal class Request
