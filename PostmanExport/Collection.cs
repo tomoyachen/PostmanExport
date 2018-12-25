@@ -307,7 +307,7 @@ namespace PostmanExport.FiddlerExtensions
                 }
 
                 Url url = new Url();
-                url.Raw = getIpAddress(session) + System.Web.HttpUtility.UrlDecode(getRequestPath(session));
+                url.Raw = getProtocol(session) + "://" + getIpAddress(session) + System.Web.HttpUtility.UrlDecode(getRequestPath(session));
                 url.Protocol = getProtocol(session);
                 url.Host = getIpAddress(session).Split('.');
                 string[] portTmp = getIpAddress(session).Split(':');
