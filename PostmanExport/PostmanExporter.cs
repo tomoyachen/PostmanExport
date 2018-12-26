@@ -19,11 +19,17 @@ namespace PostmanExport.FiddlerExtensions
 			bool flag = true;
 			string filePath = Utilities.ObtainSaveFilename("Export As" + sExportFormat, "Postman Script (*.json)|*.json");
 			bool result;
-			if (filePath == null)
+			if (filePath == null && oSessions.Length < 1)
 			{
-				result = false;
+			    MessageBox.Show("没有任何会话可以导出 !", "提示", MessageBoxButtons.OK);
+                result = false;
 			}
-			else
+			else if (oSessions.Length > 5000)
+			{
+			    MessageBox.Show("当前会话数量超过5000条，请移除部分会话后再导出 !", "提示", MessageBoxButtons.OK);
+                result = false;
+			}
+            else 
 			{
 				try
 				{

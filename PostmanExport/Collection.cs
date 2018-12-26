@@ -269,12 +269,6 @@ namespace PostmanExport.FiddlerExtensions
         //本体
         public string generateContent()
         {
-            if (this.oSessions.Length < 1) //无会话
-            {
-                //FiddlerApplication.Log.LogString("没有任何会话可以导出！");
-                throw new Exception();
-                
-            }
 
             Session[] array = this.oSessions;
             List<Item> itemList = new List<Item>();
@@ -362,6 +356,7 @@ namespace PostmanExport.FiddlerExtensions
 
             }
 
+            
             Info info = new Info();
             info.PostmanId = "";
             info.Name = getIpAddress(this.oSessions[0]);
@@ -370,10 +365,16 @@ namespace PostmanExport.FiddlerExtensions
             PostmanJson postmanJson = new PostmanJson();
             postmanJson.Info = info;
             postmanJson.Item = itemList;
+            /*
+            if (itemList.Count < 1)
+            {
 
+                throw new Exception("当前选中的会话都无法转换成Postman格式！");
+            }
+            */
             //log("postmanJson >>> " + JsonConvert.SerializeObject(postmanJson));
 
-            string postman = JsonConvert.SerializeObject(postmanJson); //获取JSON字符串
+                string postman = JsonConvert.SerializeObject(postmanJson); //获取JSON字符串
             postman = FormJson.ConvertJsonString(postman); //格式化JSON格式
             postman = System.Web.HttpUtility.UrlDecode(postman);
 
