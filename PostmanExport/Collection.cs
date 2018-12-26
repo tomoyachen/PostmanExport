@@ -120,13 +120,19 @@ namespace PostmanExport.FiddlerExtensions
         private List<Header> getHeader(Session session)
         {
             List<Header> headerList = new List<Header>();
+            String[] exceptList = {"Content-Length"};
             foreach (HTTPHeaderItem element in session.oRequest.headers) //循环取出全部的头信息
             {
+                
                 Header header = new Header();
                 header.Key = element.Name;
                 header.Value = System.Web.HttpUtility.UrlDecode(element.Value);
                 header.Type = "text";
-                headerList.Add(header);
+                
+                if (!exceptList.Contains(element.Name)) //免除列表
+                {
+                    headerList.Add(header);
+                }
             }
 
             return headerList;
