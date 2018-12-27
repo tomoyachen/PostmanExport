@@ -19,3 +19,4 @@ E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\Po
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.csproj.CopyComplete
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.dll
 E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.pdb
+E:\visual studio workspace\source\repos\PostmanExport\PostmanExport\obj\Debug\PostmanExport.csprojAssemblyReference.cache

@@ -27,9 +27,9 @@ namespace PostmanExport.FiddlerExtensions
 			{
                 result = false;
             }
-			else if (oSessions.Length > 5000)
+			else if (oSessions.Length > 1000)
 			{
-			    MessageBox.Show("当前会话数量超过5000条，请移除部分会话后再导出 !", "提示", MessageBoxButtons.OK);
+			    MessageBox.Show("当前会话数量超过1000条，请移除部分会话后再导出 !", "提示", MessageBoxButtons.OK);
                 result = false;
 			}
             else 
