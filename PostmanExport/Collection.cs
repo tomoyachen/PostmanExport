@@ -332,7 +332,7 @@ namespace PostmanExport.FiddlerExtensions
                 //log("request >>> " + JsonConvert.SerializeObject(request));
 
                 Item item = new Item();
-                item.Name = getRequestPath(this.oSessions[0]).Split('?').GetValue(0).ToString();
+                item.Name = getRequestPath(session).Split('?').GetValue(0).ToString();
                 item.Request = request;
                 item.Response = new List<Object>();
 
