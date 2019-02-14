@@ -120,7 +120,7 @@ namespace PostmanExport.FiddlerExtensions
         private List<Header> getHeader(Session session)
         {
             List<Header> headerList = new List<Header>();
-            String[] exceptList = {"Content-Length"};
+            String[] exceptList = {"Content-Length", "Host"};
             foreach (HTTPHeaderItem element in session.oRequest.headers) //循环取出全部的头信息
             {
                 
